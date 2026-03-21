@@ -128,3 +128,19 @@
     @apply font-sans;
   }
 }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(161, 161, 170, 0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(161, 161, 170, 0.3); }
+.glass-panel { background: rgba(9, 9, 11, 0.6); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(63, 63, 70, 0.3); }
+.canvas-glow { background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(34, 211, 238, 0.03) 0%, transparent 70%); }
+*:focus-visible { outline: 1px solid rgba(34, 211, 238, 0.5); outline-offset: 2px; }
+.react-flow__node { transition: filter 0.2s ease; }
+.react-flow__node:hover { filter: brightness(1.1); }
+.react-flow__handle { transition: all 0.15s ease; }
+.react-flow__handle:hover { transform: scale(1.5); }
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); } 50% { box-shadow: 0 0 12px 2px rgba(34, 211, 238, 0.15); } }
+.pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+@keyframes status-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.gradient-text { background: linear-gradient(135deg, rgb(34, 211, 238), rgb(99, 102, 241)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
