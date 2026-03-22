@@ -186,6 +186,129 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     description:
       "Observability stack for metrics collection, centralized logging, distributed tracing, and alerting. Every production system needs monitoring to detect outages, track SLOs, and debug performance issues. Prometheus + Grafana, AWS CloudWatch, Google Cloud Monitoring, Datadog, and the ELK stack are standard tools.",
   },
+  // Real-time
+  {
+    id: "websocket-server",
+    label: "WebSocket Server",
+    category: "compute",
+    icon: "Radio",
+    maxQPS: 50000,
+    latencyMs: 2,
+    scalable: true,
+    stateful: true,
+    description:
+      "Maintains persistent bidirectional connections for real-time communication. Essential for chat apps, live notifications, collaborative editing, and gaming. Services like Socket.io, AWS API Gateway WebSocket, and Pusher handle millions of concurrent connections with connection-to-server mapping stored in Redis.",
+  },
+  {
+    id: "task-scheduler",
+    label: "Task Scheduler",
+    category: "compute",
+    icon: "Clock",
+    maxQPS: 10000,
+    latencyMs: 50,
+    scalable: true,
+    stateful: false,
+    description:
+      "Manages delayed, scheduled, and recurring background jobs with retry logic and dead-letter queues. Critical for email campaigns, report generation, data pipelines, and cleanup tasks. Celery, AWS Step Functions, Google Cloud Tasks, and Temporal are common implementations.",
+  },
+  {
+    id: "stream-processor",
+    label: "Stream Processor",
+    category: "compute",
+    icon: "Waves",
+    maxQPS: 200000,
+    latencyMs: 10,
+    scalable: true,
+    stateful: false,
+    description:
+      "Processes continuous data streams in real-time for analytics, event processing, and ETL pipelines. Handles windowed aggregations, joins, and transformations on unbounded data. Apache Kafka Streams, Apache Flink, Spark Streaming, and AWS Kinesis Data Analytics are industry standards.",
+  },
+  {
+    id: "notification-service",
+    label: "Notification Service",
+    category: "compute",
+    icon: "Bell",
+    maxQPS: 50000,
+    latencyMs: 100,
+    scalable: true,
+    stateful: false,
+    description:
+      "Orchestrates multi-channel delivery of push notifications, emails, SMS, and in-app messages with priority queuing, template rendering, and delivery tracking. Firebase Cloud Messaging, AWS SNS/SES, Twilio, and OneSignal handle billions of notifications daily with device token management.",
+  },
+  // Advanced Storage
+  {
+    id: "graph-db",
+    label: "Graph Database",
+    category: "storage",
+    icon: "Share2",
+    maxQPS: 20000,
+    latencyMs: 5,
+    scalable: true,
+    stateful: true,
+    description:
+      "Stores and queries highly connected data using nodes, edges, and properties — optimized for relationship traversals like friend-of-friend queries, recommendation engines, and fraud detection. Neo4j, Amazon Neptune, and JanusGraph outperform SQL joins by 100-1000x for deep graph traversals.",
+  },
+  {
+    id: "timeseries-db",
+    label: "Time-Series DB",
+    category: "storage",
+    icon: "TrendingUp",
+    maxQPS: 100000,
+    latencyMs: 3,
+    scalable: true,
+    stateful: true,
+    description:
+      "Optimized for ingesting and querying time-stamped data with built-in downsampling, retention policies, and time-windowed aggregations. Essential for monitoring metrics, IoT sensor data, and financial tick data. InfluxDB, TimescaleDB, Amazon Timestream, and Prometheus TSDB are purpose-built for this workload.",
+  },
+  {
+    id: "data-warehouse",
+    label: "Data Warehouse",
+    category: "storage",
+    icon: "Warehouse",
+    maxQPS: 1000,
+    latencyMs: 1000,
+    scalable: true,
+    stateful: true,
+    description:
+      "Columnar analytical database designed for complex queries across terabytes/petabytes of historical data. Separates analytics from operational databases to prevent query load from impacting production. Google BigQuery, Amazon Redshift, Snowflake, and ClickHouse support SQL analytics at massive scale.",
+  },
+  // Infrastructure
+  {
+    id: "service-discovery",
+    label: "Service Discovery",
+    category: "infrastructure",
+    icon: "Compass",
+    maxQPS: 50000,
+    latencyMs: 1,
+    scalable: true,
+    stateful: true,
+    description:
+      "Enables microservices to find and communicate with each other dynamically without hardcoded addresses. Handles service registration, health checking, and DNS-based or API-based lookups. HashiCorp Consul, Apache ZooKeeper, etcd, and AWS Cloud Map are widely used for service mesh coordination.",
+  },
+  {
+    id: "reverse-proxy",
+    label: "Reverse Proxy",
+    category: "networking",
+    icon: "Shield",
+    maxQPS: 100000,
+    latencyMs: 1,
+    scalable: true,
+    stateful: false,
+    description:
+      "Sits between clients and backend servers to handle SSL termination, request routing, caching, compression, and security filtering. Unlike a load balancer, it can also serve cached content, rewrite URLs, and add security headers. Nginx, Envoy, Cloudflare, and AWS CloudFront function as reverse proxies.",
+  },
+  {
+    id: "distributed-lock",
+    label: "Distributed Lock",
+    category: "infrastructure",
+    icon: "Lock",
+    maxQPS: 10000,
+    latencyMs: 5,
+    scalable: false,
+    stateful: true,
+    description:
+      "Provides mutual exclusion across distributed systems to prevent race conditions in critical sections like inventory updates, leader election, and distributed transactions. Redis Redlock, Apache ZooKeeper recipes, and etcd lease-based locks are common implementations with trade-offs between safety and liveness.",
+  },
 ];
 
 export const COMPONENT_CATEGORIES = [

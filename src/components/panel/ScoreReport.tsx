@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle2, AlertCircle, ChevronDown, ChevronRight } from "lucide-react";
+import { CheckCircle2, AlertCircle, ChevronDown, ChevronRight, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useSimulationStore } from "@/store/simulationStore";
 import type { CategoryScore } from "@/types/scoring";
@@ -19,16 +19,16 @@ function CategorySection({ category }: { category: CategoryScore }) {
     pct >= 50 ? "bg-amber-500" : "bg-rose-500";
 
   return (
-    <div className="rounded-lg bg-zinc-800/30 px-3 py-2.5">
+    <div className="rounded-lg bg-zinc-800/50 px-3 py-2.5">
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex w-full items-center justify-between"
       >
         <div className="flex items-center gap-2">
           {expanded ? (
-            <ChevronDown className="h-3 w-3 text-zinc-500" />
+            <ChevronDown className="h-3 w-3 text-zinc-400" />
           ) : (
-            <ChevronRight className="h-3 w-3 text-zinc-500" />
+            <ChevronRight className="h-3 w-3 text-zinc-400" />
           )}
           <span className="text-xs font-medium text-zinc-300">
             {category.category}
@@ -53,13 +53,13 @@ function CategorySection({ category }: { category: CategoryScore }) {
           {category.passed.map((item, i) => (
             <div key={i} className="flex items-start gap-1.5">
               <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />
-              <span className="text-[10px] text-zinc-400">{item}</span>
+              <span className="text-xs text-zinc-400">{item}</span>
             </div>
           ))}
           {category.feedback.map((item, i) => (
             <div key={i} className="flex items-start gap-1.5">
               <AlertCircle className="mt-0.5 h-3 w-3 shrink-0 text-amber-500" />
-              <span className="text-[10px] text-zinc-400">{item}</span>
+              <span className="text-xs text-zinc-400">{item}</span>
             </div>
           ))}
         </div>
@@ -73,8 +73,16 @@ export function ScoreReport() {
 
   if (!scoreResult) {
     return (
-      <div className="py-8 text-center text-xs text-zinc-600">
-        Click &quot;Score&quot; to evaluate your design
+      <div className="flex flex-col items-center gap-3 py-10 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/80">
+          <Trophy className="h-5 w-5 text-zinc-400" />
+        </div>
+        <div>
+          <p className="text-xs font-medium text-zinc-400">Ready to evaluate</p>
+          <p className="mt-1 max-w-[220px] text-xs text-zinc-400">
+            Design your system on the canvas, then click Score to see how you did
+          </p>
+        </div>
       </div>
     );
   }
@@ -118,7 +126,7 @@ export function ScoreReport() {
               <span className="font-mono text-3xl font-bold text-zinc-100">
                 {scoreResult.total}
               </span>
-              <span className="text-[9px] text-zinc-500">/ 100</span>
+              <span className="text-[11px] text-zinc-400">/ 100</span>
             </div>
           </motion.div>
 
@@ -129,7 +137,7 @@ export function ScoreReport() {
             {scoreResult.verdict}
           </Badge>
 
-          <p className="text-center text-[11px] text-zinc-500">
+          <p className="text-center text-xs text-zinc-400">
             {scoreResult.summary}
           </p>
         </div>
@@ -138,7 +146,7 @@ export function ScoreReport() {
 
         {/* Category breakdowns */}
         <div className="space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+          <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
             Categories
           </p>
           {scoreResult.categories.map((cat) => (
@@ -151,7 +159,7 @@ export function ScoreReport() {
           <>
             <Separator className="bg-zinc-800/60" />
             <div className="space-y-2">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 Top Improvements
               </p>
               {topImprovements.map((item, i) => (
@@ -159,10 +167,10 @@ export function ScoreReport() {
                   key={i}
                   className="flex items-start gap-2 rounded-lg bg-cyan-500/5 border border-cyan-500/10 px-2.5 py-2"
                 >
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-[9px] font-bold text-cyan-400">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-[11px] font-bold text-cyan-400">
                     {i + 1}
                   </span>
-                  <span className="text-[10px] text-zinc-400">{item}</span>
+                  <span className="text-xs text-zinc-400">{item}</span>
                 </div>
               ))}
             </div>

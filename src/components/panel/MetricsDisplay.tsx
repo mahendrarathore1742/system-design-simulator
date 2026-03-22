@@ -3,6 +3,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSimulationStore } from "@/store/simulationStore";
 import { useCanvasStore } from "@/store/canvasStore";
+import { Activity } from "lucide-react";
 
 const STATUS_COLOR: Record<string, string> = {
   healthy: "bg-emerald-500",
@@ -17,8 +18,16 @@ export function MetricsDisplay() {
 
   if (!result) {
     return (
-      <div className="py-8 text-center text-xs text-zinc-600">
-        Run a simulation to see metrics
+      <div className="flex flex-col items-center gap-3 py-10 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/80">
+          <Activity className="h-5 w-5 text-zinc-400" />
+        </div>
+        <div>
+          <p className="text-xs font-medium text-zinc-400">No simulation data</p>
+          <p className="mt-1 max-w-[200px] text-xs text-zinc-400">
+            Configure load and click Run Simulation to see real-time metrics
+          </p>
+        </div>
       </div>
     );
   }
@@ -31,32 +40,32 @@ export function MetricsDisplay() {
     <div className="space-y-3">
       {/* Summary */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg bg-zinc-800/40 px-2.5 py-2">
-          <p className="text-[9px] text-zinc-500">Throughput</p>
+        <div className="rounded-lg bg-zinc-800/60 px-2.5 py-2">
+          <p className="text-[11px] text-zinc-400">Throughput</p>
           <p className="font-mono text-sm font-semibold text-cyan-400">
             {result.throughput.toLocaleString()}
           </p>
-          <p className="text-[9px] text-zinc-600">req/s</p>
+          <p className="text-[11px] text-zinc-400">req/s</p>
         </div>
-        <div className="rounded-lg bg-zinc-800/40 px-2.5 py-2">
-          <p className="text-[9px] text-zinc-500">Total Latency</p>
+        <div className="rounded-lg bg-zinc-800/60 px-2.5 py-2">
+          <p className="text-[11px] text-zinc-400">Total Latency</p>
           <p className="font-mono text-sm font-semibold text-cyan-400">
             {result.totalLatencyMs.toFixed(0)}
           </p>
-          <p className="text-[9px] text-zinc-600">ms (longest path)</p>
+          <p className="text-[11px] text-zinc-400">ms (longest path)</p>
         </div>
       </div>
 
       {result.bottleneckNodes.length > 0 && (
         <div className="rounded-lg border border-rose-500/20 bg-rose-500/5 px-2.5 py-2">
-          <p className="text-[10px] font-medium text-rose-400">
+          <p className="text-xs font-medium text-rose-400">
             {result.bottleneckNodes.length} Bottleneck{result.bottleneckNodes.length > 1 ? "s" : ""} Detected
           </p>
         </div>
       )}
 
       {/* Per-node metrics */}
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+      <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
         Per-Node Metrics
       </p>
 
@@ -68,28 +77,28 @@ export function MetricsDisplay() {
             return (
               <div
                 key={m.nodeId}
-                className="rounded-lg bg-zinc-800/30 px-2.5 py-2"
+                className="rounded-lg bg-zinc-800/50 px-2.5 py-2"
               >
                 <div className="mb-1 flex items-center gap-1.5">
                   <div className={`h-1.5 w-1.5 rounded-full ${STATUS_COLOR[m.status]}`} />
-                  <span className="text-[11px] font-medium text-zinc-300">
+                  <span className="text-xs font-medium text-zinc-300">
                     {label}
                   </span>
                   {m.isBottleneck && (
-                    <span className="ml-auto text-[9px] font-medium text-rose-400" style={{ animation: 'status-pulse 2s infinite' }}>
+                    <span className="ml-auto text-[11px] font-medium text-rose-400" style={{ animation: 'status-pulse 2s infinite' }}>
                       BOTTLENECK
                     </span>
                   )}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <p className="text-[8px] text-zinc-600">QPS</p>
-                    <p className="font-mono text-[10px] text-zinc-400">
+                    <p className="text-[10px] text-zinc-400">QPS</p>
+                    <p className="font-mono text-xs text-zinc-300">
                       {m.incomingQPS.toFixed(0)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[8px] text-zinc-600">Util</p>
+                    <p className="text-[10px] text-zinc-400">Util</p>
                     <div className="flex items-center gap-1">
                       <div className="h-1 w-8 overflow-hidden rounded-full bg-zinc-800">
                         <div
@@ -100,7 +109,7 @@ export function MetricsDisplay() {
                           style={{ width: `${Math.min(m.utilization * 100, 100)}%` }}
                         />
                       </div>
-                      <p className={`font-mono text-[10px] ${
+                      <p className={`font-mono text-xs ${
                         m.utilization > 0.8 ? "text-rose-400" :
                         m.utilization > 0.5 ? "text-amber-400" : "text-emerald-400"
                       }`}>
@@ -109,8 +118,8 @@ export function MetricsDisplay() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-[8px] text-zinc-600">Latency</p>
-                    <p className="font-mono text-[10px] text-zinc-400">
+                    <p className="text-[10px] text-zinc-400">Latency</p>
+                    <p className="font-mono text-xs text-zinc-300">
                       {m.latencyMs.toFixed(0)}ms
                     </p>
                   </div>

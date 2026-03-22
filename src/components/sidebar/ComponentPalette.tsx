@@ -1,34 +1,13 @@
 "use client";
 
-import type { DragEvent } from "react";
+import { type DragEvent, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   SYSTEM_COMPONENTS,
   COMPONENT_CATEGORIES,
 } from "@/data/components";
-import {
-  Globe,
-  Cloudy,
-  Network,
-  Router,
-  ShieldAlert,
-  Server,
-  KeyRound,
-  Database,
-  HardDrive,
-  Zap,
-  Archive,
-  Search,
-  MessageSquare,
-  GitBranch,
-  Activity,
-  GripVertical,
-} from "lucide-react";
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Globe, Cloudy, Network, Router, ShieldAlert, Server, KeyRound,
-  Database, HardDrive, Zap, Archive, Search, MessageSquare, GitBranch, Activity,
-};
+import { Server, GripVertical, Search as SearchIcon } from "lucide-react";
+import { ICON_MAP } from "@/lib/icons";
 
 const CATEGORY_ACCENT: Record<string, string> = {
   networking: "text-blue-400",
@@ -36,6 +15,14 @@ const CATEGORY_ACCENT: Record<string, string> = {
   storage: "text-amber-400",
   messaging: "text-emerald-400",
   infrastructure: "text-cyan-400",
+};
+
+const CATEGORY_BG: Record<string, string> = {
+  networking: "bg-blue-400/10",
+  compute: "bg-violet-400/10",
+  storage: "bg-amber-400/10",
+  messaging: "bg-emerald-400/10",
+  infrastructure: "bg-cyan-400/10",
 };
 
 const CATEGORY_BORDER: Record<string, string> = {
@@ -47,27 +34,46 @@ const CATEGORY_BORDER: Record<string, string> = {
 };
 
 export function ComponentPalette() {
+  const [search, setSearch] = useState("");
+
   function handleDragStart(e: DragEvent, componentId: string) {
     e.dataTransfer.setData("application/systemsim-component", componentId);
     e.dataTransfer.effectAllowed = "copy";
   }
 
+  const query = search.toLowerCase().trim();
+
   return (
-    <ScrollArea className="h-full">
+    <div className="flex h-full flex-col">
+      <div className="shrink-0 px-3 pt-3 pb-1">
+        <div className="relative">
+          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
+          <input
+            type="text"
+            placeholder="Search components..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-zinc-800 bg-zinc-800/60 py-1.5 pl-8 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-cyan-500/50 focus:bg-zinc-800"
+          />
+        </div>
+      </div>
+      <ScrollArea className="flex-1">
       <div className="space-y-4 p-3">
         {COMPONENT_CATEGORIES.map((cat) => {
           const items = SYSTEM_COMPONENTS.filter(
-            (c) => c.category === cat.key
+            (c) => c.category === cat.key && (query === "" || c.label.toLowerCase().includes(query) || c.description.toLowerCase().includes(query))
           );
+          if (query !== "" && items.length === 0) return null;
           return (
             <div key={cat.key}>
-              <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 {cat.label} ({items.length})
               </p>
               <div className="space-y-0.5">
                 {items.map((item) => {
                   const Icon = ICON_MAP[item.icon] ?? Server;
                   const accent = CATEGORY_ACCENT[item.category] ?? "text-cyan-400";
+                  const iconBg = CATEGORY_BG[item.category] ?? "bg-cyan-400/10";
                   const borderColor = CATEGORY_BORDER[item.category] ?? "border-l-cyan-400";
                   return (
                     <div
@@ -78,9 +84,11 @@ export function ComponentPalette() {
                       title={item.description}
                     >
                       <GripVertical className="h-3 w-3 shrink-0 text-zinc-600 opacity-0 transition-opacity group-hover:opacity-100" />
-                      <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors ${accent}`} />
+                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md ${iconBg}`}>
+                        <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors ${accent}`} />
+                      </div>
                       <span className="truncate">{item.label}</span>
-                      <span className="ml-auto shrink-0 text-[9px] text-zinc-600">
+                      <span className="ml-auto shrink-0 text-[11px] text-zinc-400">
                         {item.maxQPS === Infinity ? "∞" : `${(item.maxQPS / 1000).toFixed(0)}k`}
                       </span>
                     </div>
@@ -92,5 +100,6 @@ export function ComponentPalette() {
         })}
       </div>
     </ScrollArea>
+    </div>
   );
 }

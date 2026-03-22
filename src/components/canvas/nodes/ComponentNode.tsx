@@ -4,41 +4,8 @@ import { memo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { motion } from "framer-motion";
 import type { ComponentNodeData } from "@/store/canvasStore";
-import {
-  Globe,
-  Cloudy,
-  Network,
-  Router,
-  ShieldAlert,
-  Server,
-  KeyRound,
-  Database,
-  HardDrive,
-  Zap,
-  Archive,
-  Search,
-  MessageSquare,
-  GitBranch,
-  Activity,
-} from "lucide-react";
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Globe,
-  Cloudy,
-  Network,
-  Router,
-  ShieldAlert,
-  Server,
-  KeyRound,
-  Database,
-  HardDrive,
-  Zap,
-  Archive,
-  Search,
-  MessageSquare,
-  GitBranch,
-  Activity,
-};
+import { Server } from "lucide-react";
+import { ICON_MAP } from "@/lib/icons";
 
 const CATEGORY_COLORS: Record<string, { border: string; icon: string; glow: string }> = {
   networking: { border: "border-blue-500/40", icon: "text-blue-400", glow: "shadow-blue-500/20" },

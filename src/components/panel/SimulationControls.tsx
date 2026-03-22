@@ -24,7 +24,7 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+      <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
         Simulation Config
       </p>
 
@@ -34,10 +34,10 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
           <button
             key={preset.label}
             onClick={() => setConfig({ requestsPerSec: preset.value })}
-            className={`rounded-full px-2.5 py-1 text-[10px] font-medium transition-colors ${
+            className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
               config.requestsPerSec === preset.value
                 ? "bg-cyan-500/20 text-cyan-400"
-                : "bg-zinc-800/60 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
+                : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
             }`}
           >
             {preset.label}
@@ -48,8 +48,8 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
       <div className="space-y-3">
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="text-[11px] text-zinc-400">Requests/sec</label>
-            <span className="font-mono text-[11px] text-cyan-400">
+            <label className="text-xs text-zinc-400">Requests/sec</label>
+            <span className="font-mono text-xs text-cyan-400">
               {config.requestsPerSec.toLocaleString()}
             </span>
           </div>
@@ -65,8 +65,8 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="text-[11px] text-zinc-400">Duration (sec)</label>
-            <span className="font-mono text-[11px] text-cyan-400">
+            <label className="text-xs text-zinc-400">Duration (sec)</label>
+            <span className="font-mono text-xs text-cyan-400">
               {config.durationSec}s
             </span>
           </div>

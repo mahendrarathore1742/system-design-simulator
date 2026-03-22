@@ -11,6 +11,10 @@ import {
   PanelRight,
   Trash2,
   Download,
+  Sun,
+  Moon,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 import { useCanvasStore } from "@/store/canvasStore";
@@ -33,8 +37,18 @@ export function TopBar({ onSimulate, onScore }: TopBarProps) {
   const rightPanelOpen = useAppStore((s) => s.rightPanelOpen);
   const toggleLeftSidebar = useAppStore((s) => s.toggleLeftSidebar);
   const toggleRightPanel = useAppStore((s) => s.toggleRightPanel);
-  const clearCanvas = useCanvasStore((s) => s.clearCanvas);
+  const theme = useAppStore((s) => s.theme);
+  const toggleTheme = useAppStore((s) => s.toggleTheme);
+  const soundEnabled = useAppStore((s) => s.soundEnabled);
+  const toggleSound = useAppStore((s) => s.toggleSound);
+  const showToast = useAppStore((s) => s.showToast);
+  const clearCanvasRaw = useCanvasStore((s) => s.clearCanvas);
   const addNode = useCanvasStore((s) => s.addNode);
+
+  const clearCanvas = useCallback(() => {
+    clearCanvasRaw();
+    showToast("Canvas cleared", "info");
+  }, [clearCanvasRaw, showToast]);
 
   const currentProblem = PROBLEMS.find((p) => p.id === selectedProblemId);
 
@@ -163,6 +177,22 @@ export function TopBar({ onSimulate, onScore }: TopBarProps) {
 
       {/* Right section */}
       <div className="flex items-center gap-2">
+        <button
+          onClick={toggleTheme}
+          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        </button>
+
+        <button
+          onClick={toggleSound}
+          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+          title={soundEnabled ? "Mute sounds" : "Enable sounds"}
+        >
+          {soundEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+        </button>
+
         <button
           onClick={clearCanvas}
           className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-rose-400"

@@ -134,19 +134,21 @@ export function DesignCanvas() {
       {isEmpty && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/80">
-              <Layers className="h-6 w-6 text-zinc-600" />
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/80">
+              <Layers className="h-8 w-8 text-zinc-500" />
+              <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite' }} />
+              <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite 1s' }} />
+              <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite 2s' }} />
             </div>
             <div>
               <p className="gradient-text text-sm font-medium">
                 Design your system
               </p>
-              <p className="mt-1 max-w-xs text-xs leading-relaxed text-zinc-600">
-                Drag components from the sidebar onto the canvas, then connect
-                them to build your architecture.
+              <p className="mt-1 max-w-xs text-xs leading-relaxed text-zinc-400">
+                Select a problem from the sidebar, then drag components to build your architecture
               </p>
             </div>
-            <div className="mt-2 flex items-center gap-4 text-[10px] text-zinc-600">
+            <div className="mt-2 flex items-center gap-4 text-xs text-zinc-400">
               <span className="flex items-center gap-1">
                 <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5 font-mono text-[9px]">
                   Drag

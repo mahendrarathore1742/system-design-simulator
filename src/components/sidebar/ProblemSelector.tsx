@@ -47,7 +47,7 @@ export function ProblemSelector() {
               </span>
               <Badge
                 variant="outline"
-                className={`h-4 px-1.5 text-[9px] font-medium ${getDifficultyColor(
+                className={`h-4 px-1.5 text-[11px] font-medium ${getDifficultyColor(
                   problem.difficulty
                 )}`}
               >
@@ -56,7 +56,7 @@ export function ProblemSelector() {
             </div>
             <div className="flex flex-wrap gap-1">
               {problem.tags.map((tag, i) => (
-                <span key={tag} className="text-[9px] text-zinc-600">
+                <span key={tag} className="text-[11px] text-zinc-400">
                   {tag}{i < problem.tags.length - 1 ? " ·" : ""}
                 </span>
               ))}
