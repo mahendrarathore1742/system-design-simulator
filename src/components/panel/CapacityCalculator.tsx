@@ -89,7 +89,7 @@ export function CapacityCalculator() {
         />
       </div>
 
-      <Separator className="bg-zinc-800/60" />
+      <Separator className="bg-zinc-700/40" />
 
       {/* Results */}
       <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -113,7 +113,7 @@ export function CapacityCalculator() {
         />
       </div>
 
-      <Separator className="bg-zinc-800/60" />
+      <Separator className="bg-zinc-700/40" />
 
       <div className="space-y-2">
         <ResultRow
@@ -133,7 +133,7 @@ export function CapacityCalculator() {
       </div>
 
       {/* Formula reference */}
-      <div className="rounded-lg border border-zinc-800/60 bg-zinc-900/50 px-2.5 py-2">
+      <div className="rounded-lg border border-zinc-700/60 bg-zinc-900/50 px-2.5 py-2">
         <p className="text-[11px] font-medium text-zinc-400">Formulas</p>
         <div className="mt-1 space-y-0.5 font-mono text-[11px] text-zinc-400">
           <p>QPS = DAU × req/user ÷ 86,400</p>
@@ -176,7 +176,7 @@ function InputField({ label, value, onChange, presets }: InputFieldProps) {
           const v = Number(e.target.value);
           if (!isNaN(v) && v >= 0) onChange(v);
         }}
-        className="mb-1.5 w-full rounded-md border border-zinc-800 bg-zinc-900/80 px-2.5 py-1.5 font-mono text-xs text-zinc-300 outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
+        className="mb-1.5 w-full rounded-md border border-zinc-700 bg-zinc-800/80 px-2.5 py-1.5 font-mono text-xs text-zinc-300 outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
       />
       <div className="flex gap-1">
         {presets.map((p) => (
@@ -186,7 +186,7 @@ function InputField({ label, value, onChange, presets }: InputFieldProps) {
             className={`rounded-full px-2 py-0.5 text-[11px] font-medium transition-colors ${
               value === p.value
                 ? "bg-cyan-500/20 text-cyan-400"
-                : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+                : "bg-zinc-700/40 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
             }`}
           >
             {p.label}
@@ -205,7 +205,7 @@ interface ResultRowProps {
 
 function ResultRow({ label, value, highlight }: ResultRowProps) {
   return (
-    <div className="flex items-center justify-between rounded-md bg-zinc-800/60 px-2.5 py-1.5">
+    <div className="flex items-center justify-between rounded-md bg-zinc-700/40 px-2.5 py-1.5">
       <span className="text-xs text-zinc-400">{label}</span>
       <span
         className={`font-mono text-xs font-medium ${

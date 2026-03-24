@@ -62,7 +62,7 @@ export function ComponentPalette() {
             placeholder="Search components..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-zinc-800 bg-zinc-800/60 py-1.5 pl-8 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-cyan-500/50 focus:bg-zinc-800"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/80 py-1.5 pl-8 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-cyan-500/50 focus:bg-zinc-700"
           />
         </div>
       </div>
@@ -89,7 +89,7 @@ export function ComponentPalette() {
                       key={item.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, item.id)}
-                      className={`group flex cursor-grab items-center gap-2 rounded-md border-l-2 px-2 py-1.5 text-xs text-zinc-400 transition-all hover:bg-zinc-800/80 hover:text-zinc-200 hover:translate-x-0.5 active:cursor-grabbing ${borderColor}`}
+                      className={`group flex cursor-grab items-center gap-2 rounded-md border-l-2 px-2 py-1.5 text-xs text-zinc-400 transition-all hover:bg-zinc-700/60 hover:text-zinc-200 hover:translate-x-0.5 active:cursor-grabbing ${borderColor}`}
                       title={item.description}
                     >
                       <GripVertical className="h-3 w-3 shrink-0 text-zinc-600 opacity-0 transition-opacity group-hover:opacity-100" />

@@ -21,70 +21,74 @@ interface RightPanelProps {
 }
 
 export function RightPanel({ open, onSimulate }: RightPanelProps) {
-  if (!open) return null;
-
   return (
-    <aside className="glass-panel flex w-[300px] shrink-0 flex-col border-l border-zinc-800/80 transition-all duration-200">
-      <Tabs defaultValue="properties" className="flex flex-1 flex-col">
-        <TabsList className="mx-2 mt-2 h-9 w-auto shrink-0 bg-zinc-800/50">
-          <TabsTrigger
-            value="properties"
-            className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
-          >
-            Properties
-          </TabsTrigger>
-          <TabsTrigger
-            value="simulation"
-            className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
-          >
-            Simulate
-          </TabsTrigger>
-          <TabsTrigger
-            value="score"
-            className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
-          >
-            Score
-          </TabsTrigger>
-          <TabsTrigger
-            value="capacity"
-            className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
-          >
-            Capacity
-          </TabsTrigger>
-        </TabsList>
+    <aside
+      className={`glass-panel flex shrink-0 flex-col border-l border-zinc-800/80 overflow-hidden transition-all duration-300 ease-in-out ${
+        open ? "w-[300px] opacity-100" : "w-0 opacity-0 border-l-0"
+      }`}
+    >
+      <div className="flex w-[300px] flex-1 flex-col">
+        <Tabs defaultValue="properties" className="flex flex-1 flex-col">
+          <TabsList className="mx-2 mt-2 h-9 w-auto shrink-0 bg-zinc-700/40">
+            <TabsTrigger
+              value="properties"
+              className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
+            >
+              Properties
+            </TabsTrigger>
+            <TabsTrigger
+              value="simulation"
+              className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
+            >
+              Simulate
+            </TabsTrigger>
+            <TabsTrigger
+              value="score"
+              className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
+            >
+              Score
+            </TabsTrigger>
+            <TabsTrigger
+              value="capacity"
+              className="h-8 px-4 text-sm data-[state=active]:border-b-2 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent data-[state=active]:text-zinc-100"
+            >
+              Capacity
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="properties" className="mt-0 flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-3">
-              <PropertiesTab />
+          <TabsContent value="properties" className="mt-0 flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="p-3">
+                <PropertiesTab />
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="simulation" className="mt-0 flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="p-3 space-y-4">
+                <SimulationControls onSimulate={onSimulate} />
+                <Separator className="bg-zinc-700/40" />
+                <MetricsDisplay />
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="score" className="mt-0 flex-1 overflow-hidden">
+            <div className="h-full p-3">
+              <ScoreReport />
             </div>
-          </ScrollArea>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="simulation" className="mt-0 flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-3 space-y-4">
-              <SimulationControls onSimulate={onSimulate} />
-              <Separator className="bg-zinc-800/60" />
-              <MetricsDisplay />
-            </div>
-          </ScrollArea>
-        </TabsContent>
-
-        <TabsContent value="score" className="mt-0 flex-1 overflow-hidden">
-          <div className="h-full p-3">
-            <ScoreReport />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="capacity" className="mt-0 flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-3">
-              <CapacityCalculator />
-            </div>
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="capacity" className="mt-0 flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="p-3">
+                <CapacityCalculator />
+              </div>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+      </div>
     </aside>
   );
 }
@@ -117,7 +121,7 @@ function PropertiesTab() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex items-center justify-between rounded-md bg-zinc-800/60 px-2.5 py-1.5"
+                className="flex items-center justify-between rounded-md bg-zinc-700/40 px-2.5 py-1.5"
               >
                 <span className="text-xs text-zinc-400">{item.label}</span>
                 <span className="font-mono text-xs text-zinc-300">{item.value}</span>
@@ -130,7 +134,7 @@ function PropertiesTab() {
       {/* Constraints */}
       {problem && problem.constraints.length > 0 && (
         <>
-          <Separator className="bg-zinc-800/60" />
+          <Separator className="bg-zinc-700/40" />
           <ConstraintsSection constraints={problem.constraints} />
         </>
       )}
@@ -138,12 +142,12 @@ function PropertiesTab() {
       {/* Hints */}
       {problem && problem.hints.length > 0 && (
         <>
-          <Separator className="bg-zinc-800/60" />
+          <Separator className="bg-zinc-700/40" />
           <HintsSection hints={problem.hints} />
         </>
       )}
 
-      <Separator className="bg-zinc-800/60" />
+      <Separator className="bg-zinc-700/40" />
 
       {/* Selected node properties */}
       {selectedNode ? (
@@ -153,7 +157,7 @@ function PropertiesTab() {
           </p>
 
           <div className="space-y-2">
-            <div className="rounded-lg bg-zinc-800/60 px-3 py-2">
+            <div className="rounded-lg bg-zinc-700/40 px-3 py-2">
               <p className="text-xs font-medium text-zinc-200">
                 {selectedNode.data.label}
               </p>
@@ -216,7 +220,7 @@ function PropertiesTab() {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3 py-6 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/80">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-700/50">
             <Info className="h-4 w-4 text-zinc-400" />
           </div>
           <div>

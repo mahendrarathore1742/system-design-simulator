@@ -6,7 +6,7 @@ import { Monitor } from "lucide-react";
 export default function Home() {
   return (
     <>
-      <div className="flex h-full items-center justify-center bg-zinc-950 p-8 text-center md:hidden">
+      <div className="flex h-full items-center justify-center bg-background p-8 text-center md:hidden">
         <div>
           <Monitor className="mx-auto h-12 w-12 text-zinc-600 mb-4" />
           <h2 className="text-lg font-semibold text-zinc-200">Desktop Only</h2>

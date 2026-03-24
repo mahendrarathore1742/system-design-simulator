@@ -37,7 +37,7 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
             className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
               config.requestsPerSec === preset.value
                 ? "bg-cyan-500/20 text-cyan-400"
-                : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+                : "bg-zinc-700/40 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
             }`}
           >
             {preset.label}
@@ -81,7 +81,7 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
         </div>
       </div>
 
-      <Separator className="bg-zinc-800/60" />
+      <Separator className="bg-zinc-700/40" />
 
       <Button
         onClick={onSimulate}

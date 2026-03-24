@@ -47,7 +47,7 @@ function ComponentNodeInner({ data, selected }: NodeProps) {
       }
       transition={isBottleneck ? { duration: 1.5, repeat: Infinity } : {}}
       className={`
-        relative flex flex-col items-center gap-1.5 rounded-xl border bg-zinc-900/90 px-5 py-4
+        relative flex flex-col items-center gap-1.5 rounded-xl border bg-zinc-800/90 px-5 py-4
         backdrop-blur-sm transition-all duration-200
         ${colors.border}
         ${selected ? `ring-2 ring-cyan-400/80 ${colors.glow} shadow-lg` : "shadow-md shadow-black/30"}
@@ -62,7 +62,7 @@ function ComponentNodeInner({ data, selected }: NodeProps) {
       }`} style={{ animation: status !== 'idle' ? 'status-pulse 2s infinite' : 'none' }} />
 
       {/* Icon */}
-      <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-800/80 ${colors.icon}`}>
+      <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-700/50 ${colors.icon}`}>
         <Icon className="h-4 w-4" />
       </div>
 

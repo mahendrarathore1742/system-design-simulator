@@ -96,7 +96,8 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
       <div className="flex items-center gap-3">
         <button
           onClick={toggleLeftSidebar}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-200"
+          title="Toggle sidebar"
         >
           <PanelLeft className="h-4 w-4" />
         </button>
@@ -115,7 +116,7 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-700 hover:bg-zinc-800 hover:text-zinc-100"
+            className="flex items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2.5 py-1 text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-700 hover:text-zinc-100"
           >
             {currentProblem?.title ?? "Select Problem"}
             <ChevronDown className="h-3 w-3 text-zinc-500" />
@@ -127,7 +128,7 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
                 className="fixed inset-0 z-40"
                 onClick={() => setDropdownOpen(false)}
               />
-              <div className="absolute left-0 top-full z-50 mt-1 w-52 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 py-1 shadow-xl shadow-black/40">
+              <div className="absolute left-0 top-full z-50 mt-1 max-h-80 w-52 overflow-y-auto rounded-lg border border-zinc-700 bg-zinc-800 py-1 shadow-xl shadow-black/40">
                 {PROBLEMS.map((problem) => (
                   <button
                     key={problem.id}
@@ -135,7 +136,7 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
                       setSelectedProblem(problem.id);
                       setDropdownOpen(false);
                     }}
-                    className={`flex w-full items-center px-3 py-1.5 text-left text-xs transition-colors hover:bg-zinc-800 ${
+                    className={`flex w-full items-center px-3 py-1.5 text-left text-xs transition-colors hover:bg-zinc-700 ${
                       problem.id === selectedProblemId
                         ? "text-cyan-400"
                         : "text-zinc-400 hover:text-zinc-200"
@@ -151,7 +152,7 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
 
         <button
           onClick={loadReference}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-zinc-500 transition-colors hover:bg-zinc-700 hover:text-zinc-300"
           title="Load reference solution"
         >
           <Download className="h-3 w-3" />
@@ -163,7 +164,7 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
       <div className="flex items-center gap-2">
         <button
           onClick={onClearCanvas}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-rose-400"
+          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-700 hover:text-rose-400"
           title="Clear canvas"
         >
           <Trash2 className="h-3.5 w-3.5" />
@@ -189,7 +190,8 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
 
         <button
           onClick={toggleRightPanel}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-200"
+          title="Toggle panel"
         >
           <PanelRight className="h-4 w-4" />
         </button>

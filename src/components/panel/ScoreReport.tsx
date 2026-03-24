@@ -19,7 +19,7 @@ function CategorySection({ category }: { category: CategoryScore }) {
     pct >= 50 ? "bg-amber-500" : "bg-rose-500";
 
   return (
-    <div className="rounded-lg bg-zinc-800/50 px-3 py-2.5">
+    <div className="rounded-lg bg-zinc-700/40 px-3 py-2.5">
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex w-full items-center justify-between"
@@ -74,13 +74,14 @@ export function ScoreReport() {
   if (!scoreResult) {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/80">
-          <Trophy className="h-5 w-5 text-zinc-400" />
+        <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-zinc-700/50">
+          <Trophy className="h-5 w-5 text-zinc-500" />
+          <div className="absolute inset-0 rounded-full border border-dashed border-zinc-700/50" style={{ animation: 'spin 12s linear infinite' }} />
         </div>
         <div>
-          <p className="text-xs font-medium text-zinc-400">Ready to evaluate</p>
-          <p className="mt-1 max-w-[220px] text-xs text-zinc-400">
-            Design your system on the canvas, then click Score to see how you did
+          <p className="text-xs font-medium text-zinc-300">Ready to evaluate</p>
+          <p className="mt-1 max-w-[220px] text-xs text-zinc-500">
+            Design your system on the canvas, then click <span className="text-cyan-400/80">Score</span> to see how you did
           </p>
         </div>
       </div>

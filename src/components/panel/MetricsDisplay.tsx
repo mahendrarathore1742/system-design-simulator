@@ -19,13 +19,14 @@ export function MetricsDisplay() {
   if (!result) {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/80">
-          <Activity className="h-5 w-5 text-zinc-400" />
+        <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-zinc-700/50">
+          <Activity className="h-5 w-5 text-zinc-500" />
+          <div className="absolute inset-0 rounded-full border border-dashed border-zinc-700/50" style={{ animation: 'spin 12s linear infinite' }} />
         </div>
         <div>
-          <p className="text-xs font-medium text-zinc-400">No simulation data</p>
-          <p className="mt-1 max-w-[200px] text-xs text-zinc-400">
-            Configure load and click Run Simulation to see real-time metrics
+          <p className="text-xs font-medium text-zinc-300">No simulation data</p>
+          <p className="mt-1 max-w-[200px] text-xs text-zinc-500">
+            Configure load above and click <span className="text-cyan-400/80">Run Simulation</span> to see metrics
           </p>
         </div>
       </div>
@@ -40,14 +41,14 @@ export function MetricsDisplay() {
     <div className="space-y-3">
       {/* Summary */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg bg-zinc-800/60 px-2.5 py-2">
+        <div className="rounded-lg bg-zinc-700/40 px-2.5 py-2">
           <p className="text-[11px] text-zinc-400">Throughput</p>
           <p className="font-mono text-sm font-semibold text-cyan-400">
             {result.throughput.toLocaleString()}
           </p>
           <p className="text-[11px] text-zinc-400">req/s</p>
         </div>
-        <div className="rounded-lg bg-zinc-800/60 px-2.5 py-2">
+        <div className="rounded-lg bg-zinc-700/40 px-2.5 py-2">
           <p className="text-[11px] text-zinc-400">Total Latency</p>
           <p className="font-mono text-sm font-semibold text-cyan-400">
             {result.totalLatencyMs.toFixed(0)}
@@ -77,7 +78,7 @@ export function MetricsDisplay() {
             return (
               <div
                 key={m.nodeId}
-                className="rounded-lg bg-zinc-800/50 px-2.5 py-2"
+                className="rounded-lg bg-zinc-700/40 px-2.5 py-2"
               >
                 <div className="mb-1 flex items-center gap-1.5">
                   <div className={`h-1.5 w-1.5 rounded-full ${STATUS_COLOR[m.status]}`} />

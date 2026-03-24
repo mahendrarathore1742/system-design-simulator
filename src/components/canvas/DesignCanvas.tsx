@@ -102,21 +102,21 @@ export function DesignCanvas() {
         defaultEdgeOptions={{ type: "animated" }}
         fitView
         proOptions={{ hideAttribution: true }}
-        className="bg-zinc-950"
+        className="bg-zinc-900"
       >
         <Background
           variant={BackgroundVariant.Dots}
           gap={20}
-          size={1}
-          color="rgb(63, 63, 70)"
-          className="!bg-zinc-950"
+          size={1.2}
+          color="rgba(161, 161, 170, 0.3)"
+          className="!bg-zinc-900"
         />
         <Controls
-          className="!rounded-lg !border-zinc-800 !bg-zinc-900/90 !shadow-lg [&>button]:!border-zinc-800 [&>button]:!bg-zinc-900 [&>button]:!text-zinc-400 [&>button:hover]:!bg-zinc-800 [&>button:hover]:!text-zinc-200"
+          className="!rounded-lg !border-zinc-700 !bg-zinc-800/90 !shadow-lg [&>button]:!border-zinc-700 [&>button]:!bg-zinc-800 [&>button]:!text-zinc-300 [&>button:hover]:!bg-zinc-700 [&>button:hover]:!text-zinc-100"
           position="bottom-left"
         />
         <MiniMap
-          className="!rounded-lg !border-zinc-800 !bg-zinc-900/80"
+          className="!rounded-lg !border-zinc-700 !bg-zinc-800/80"
           maskColor="rgba(0, 0, 0, 0.7)"
           nodeColor={(node) => {
             const data = node.data as ComponentNodeData;
@@ -134,8 +134,8 @@ export function DesignCanvas() {
       {isEmpty && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4 text-center">
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/80">
-              <Layers className="h-8 w-8 text-zinc-500" />
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-800/80">
+              <Layers className="h-8 w-8 text-zinc-400" />
               <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite' }} />
               <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite 1s' }} />
               <div className="absolute inset-0 rounded-2xl" style={{ animation: 'empty-pulse 3s ease-in-out infinite 2s' }} />
@@ -150,22 +150,22 @@ export function DesignCanvas() {
             </div>
             <div className="mt-2 flex items-center gap-4 text-xs text-zinc-400">
               <span className="flex items-center gap-1">
-                <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5 font-mono text-[9px]">
+                <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1 py-0.5 font-mono text-[9px]">
                   Drag
                 </kbd>
                 to add
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5 font-mono text-[9px]">
+                <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1 py-0.5 font-mono text-[9px]">
                   Click
                 </kbd>
                 to select
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5 font-mono text-[9px]">
-                  ⌘ Z
+                <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1 py-0.5 font-mono text-[9px]">
+                  ⌫
                 </kbd>
-                to undo
+                to delete
               </span>
             </div>
           </div>
