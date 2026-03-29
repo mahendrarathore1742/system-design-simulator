@@ -15,7 +15,7 @@ import {
 import { useAppStore } from "@/store/appStore";
 import { useCanvasStore } from "@/store/canvasStore";
 import { PROBLEMS } from "@/data/problems";
-import type { Node } from "@xyflow/react";
+import type { Node, Edge } from "@xyflow/react";
 import { getComponentById } from "@/data/components";
 import type { ComponentNodeData } from "@/store/canvasStore";
 
@@ -32,7 +32,6 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
   const setSelectedProblem = useAppStore((s) => s.setSelectedProblem);
   const toggleLeftSidebar = useAppStore((s) => s.toggleLeftSidebar);
   const toggleRightPanel = useAppStore((s) => s.toggleRightPanel);
-  const addNode = useCanvasStore((s) => s.addNode);
 
   const currentProblem = PROBLEMS.find((p) => p.id === selectedProblemId);
 
@@ -42,17 +41,18 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
 
     onClearCanvas();
 
+    // Use index-based keys so duplicate componentIds get unique map entries
     const nodeIdMap = new Map<string, string>();
+    const newNodes: Node<ComponentNodeData>[] = [];
 
-    // Create nodes from reference
-    for (const ref of problem.referenceSolution.nodes) {
+    problem.referenceSolution.nodes.forEach((ref, index) => {
       const comp = getComponentById(ref.componentId);
-      if (!comp) continue;
+      if (!comp) return;
 
-      const nodeId = `${comp.id}-ref-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-      nodeIdMap.set(ref.componentId, nodeId);
+      const nodeId = `${comp.id}-ref-${index}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+      nodeIdMap.set(`${ref.componentId}-${index}`, nodeId);
 
-      const newNode: Node<ComponentNodeData> = {
+      newNodes.push({
         id: nodeId,
         type: "component",
         position: { x: ref.x, y: ref.y },
@@ -66,29 +66,33 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
           latencyMs: comp.latencyMs,
           scalable: comp.scalable,
         },
-      };
-      addNode(newNode);
+      });
+    });
+
+    // Build edges. Edge source/target reference componentIds. Find the first
+    // matching node for each componentId (handles the common unique-id case and
+    // gracefully picks one when there are duplicates).
+    const newEdges: Edge[] = [];
+    for (const ref of problem.referenceSolution.edges) {
+      const sourceId = findNodeIdByComponent(nodeIdMap, ref.source);
+      const targetId = findNodeIdByComponent(nodeIdMap, ref.target);
+      if (sourceId && targetId) {
+        newEdges.push({
+          id: `e-${sourceId}-${targetId}`,
+          source: sourceId,
+          target: targetId,
+          type: "animated",
+        });
+      }
     }
 
-    // Add edges after a tick so nodes exist
-    setTimeout(() => {
-      const { edges } = useCanvasStore.getState();
-      const newEdges = [...edges];
-      for (const ref of problem.referenceSolution.edges) {
-        const sourceId = nodeIdMap.get(ref.source);
-        const targetId = nodeIdMap.get(ref.target);
-        if (sourceId && targetId) {
-          newEdges.push({
-            id: `e-${sourceId}-${targetId}`,
-            source: sourceId,
-            target: targetId,
-            type: "animated",
-          });
-        }
-      }
-      useCanvasStore.setState({ edges: newEdges });
-    }, 50);
-  }, [selectedProblemId, onClearCanvas, addNode]);
+    // Batch nodes and edges in a single state update to avoid race conditions
+    const { nodes: currentNodes, edges: currentEdges } = useCanvasStore.getState();
+    useCanvasStore.setState({
+      nodes: [...currentNodes, ...newNodes],
+      edges: [...currentEdges, ...newEdges],
+    });
+  }, [selectedProblemId, onClearCanvas]);
 
   return (
     <header className="glass-panel flex h-14 shrink-0 items-center justify-between border-b border-zinc-800/80 px-3">
@@ -198,4 +202,12 @@ export function TopBar({ onSimulate, onScore, onClearCanvas }: TopBarProps) {
       </div>
     </header>
   );
+}
+
+/** Find the first node ID in the map whose key starts with the given componentId. */
+function findNodeIdByComponent(nodeIdMap: Map<string, string>, componentId: string): string | undefined {
+  for (const [key, value] of nodeIdMap) {
+    if (key.startsWith(`${componentId}-`)) return value;
+  }
+  return undefined;
 }

@@ -13,16 +13,22 @@ export function scoreCost(
   const componentIds = nodes.map((n) => n.data.componentId);
 
   // Not over-provisioned (3 pts) — total component count reasonable
-  if (nodes.length >= 3 && nodes.length <= 15) {
+  if (nodes.length >= 3 && nodes.length <= 25) {
     score += 3;
     passed.push("Appropriate number of components (" + nodes.length + ") — not over-engineered or under-provisioned");
   } else if (nodes.length < 3) {
+    score += 1;
     feedback.push(
       "System has only " + nodes.length + " component(s) — this is under-provisioned for any real workload. A minimal production system needs at least DNS → Load Balancer → App Server → Database. Add the missing layers."
     );
+  } else if (nodes.length <= 35) {
+    score += 1;
+    feedback.push(
+      "System has " + nodes.length + " components — this is getting complex. Each component adds operational cost (hosting, monitoring, on-call burden). Verify each component serves a distinct, necessary purpose."
+    );
   } else {
     feedback.push(
-      "System has " + nodes.length + " components — consider whether all are necessary. Each component adds operational cost (hosting, monitoring, on-call burden). Over-engineering a simple problem is as costly as under-engineering a complex one."
+      "System has " + nodes.length + " components — this is likely over-engineered. Each component adds operational cost (hosting, monitoring, on-call burden). Over-engineering a simple problem is as costly as under-engineering a complex one. Consider consolidating."
     );
   }
 
@@ -53,9 +59,8 @@ export function scoreCost(
     feedback.push(
       "Add a Cache (Redis/Memcached) to reduce database load and cost. Databases are one of the most expensive components to scale. A cache costing $50-100/month can handle reads that would otherwise require a $500+/month larger DB instance."
     );
-  } else {
-    score += 1;
   }
+  // No cache or no DB = 0 points for this check (cache cost savings only apply when both exist)
 
   // No disconnected nodes (3 pts)
   const connectedNodes = new Set<string>();

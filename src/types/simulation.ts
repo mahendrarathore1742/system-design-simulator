@@ -16,6 +16,7 @@ export interface SimulationResult {
   bottleneckNodes: string[];
   throughput: number;
   timestamp: number;
+  warnings: string[];
 }
 
 export interface SimulationConfig {

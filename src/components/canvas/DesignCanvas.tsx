@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, type DragEvent } from "react";
+import { useCallback, useMemo, useRef, type DragEvent } from "react";
 import {
   ReactFlow,
   Controls,
@@ -52,7 +52,7 @@ export function DesignCanvas() {
       });
 
       const newNode: Node<ComponentNodeData> = {
-        id: `${componentId}-${Date.now()}`,
+        id: `${componentId}-${crypto.randomUUID()}`,
         type: "component",
         position,
         data: {
@@ -82,6 +82,18 @@ export function DesignCanvas() {
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
   }, [setSelectedNode]);
+
+  const miniMapNodeColor = useMemo(
+    () => (node: Node) => {
+      const data = node.data as ComponentNodeData;
+      const status = data.status as string;
+      if (status === "critical") return "#ef4444";
+      if (status === "warning") return "#f59e0b";
+      if (status === "healthy") return "#10b981";
+      return "#52525b";
+    },
+    []
+  );
 
   const isEmpty = nodes.length === 0;
 
@@ -118,14 +130,7 @@ export function DesignCanvas() {
         <MiniMap
           className="!rounded-lg !border-zinc-700 !bg-zinc-800/80"
           maskColor="rgba(0, 0, 0, 0.7)"
-          nodeColor={(node) => {
-            const data = node.data as ComponentNodeData;
-            const status = data.status as string;
-            if (status === "critical") return "#ef4444";
-            if (status === "warning") return "#f59e0b";
-            if (status === "healthy") return "#10b981";
-            return "#52525b";
-          }}
+          nodeColor={miniMapNodeColor}
           position="bottom-right"
         />
       </ReactFlow>

@@ -37,7 +37,13 @@ export function scoreDesign(
     scoreTradeoffs(nodes, edges),
   ];
 
-  const total = categories.reduce((sum, c) => sum + c.score, 0);
+  // Clamp each category score to [0, maxScore]
+  for (const c of categories) {
+    c.score = Math.max(0, Math.min(c.score, c.maxScore));
+  }
+
+  const rawTotal = categories.reduce((sum, c) => sum + c.score, 0);
+  const total = Math.max(0, Math.min(rawTotal, 100));
   const { verdict, verdictColor } = getVerdict(total);
 
   const totalFeedback = categories.flatMap((c) => c.feedback);

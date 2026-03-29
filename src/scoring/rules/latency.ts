@@ -11,11 +11,6 @@ export function scoreLatency(
   let score = 0;
 
   const componentIds = nodes.map((n) => n.data.componentId);
-  const inDegree = new Map<string, number>();
-  for (const node of nodes) inDegree.set(node.id, 0);
-  for (const edge of edges) {
-    inDegree.set(edge.target, (inDegree.get(edge.target) ?? 0) + 1);
-  }
 
   // CDN for static content (3 pts)
   if (componentIds.includes("cdn")) {
@@ -32,20 +27,20 @@ export function scoreLatency(
   const dbNodes = nodes.filter(
     (n) => n.data.componentId === "sql-db" || n.data.componentId === "nosql-db"
   );
+  // Build adjacency for reachability checks
+  const adj = new Map<string, string[]>();
+  for (const node of nodes) adj.set(node.id, []);
+  for (const edge of edges) adj.get(edge.source)?.push(edge.target);
+  const dbNodeIds = new Set(dbNodes.map((d) => d.id));
+  // Check: cache is source of an edge AND a DB is reachable within 2 hops from that cache
   const cacheBeforeDB =
     cacheNodes.length > 0 &&
     dbNodes.length > 0 &&
-    cacheNodes.some((c) =>
-      edges.some(
-        (e) =>
-          e.source === c.id || // cache feeds something
-          nodes.some(
-            (n) =>
-              edges.some((e2) => e2.source === n.id && e2.target === c.id) &&
-              edges.some((e3) => e3.source === n.id && dbNodes.some((d) => e3.target === d.id))
-          )
-      )
-    );
+    cacheNodes.some((c) => {
+      const hop1 = adj.get(c.id) ?? [];
+      if (hop1.some((id) => dbNodeIds.has(id))) return true;
+      return hop1.some((mid) => (adj.get(mid) ?? []).some((id) => dbNodeIds.has(id)));
+    });
   if (cacheBeforeDB) {
     score += 3;
     passed.push("Cache intercepts reads before hitting the database — memory access (~1ms) vs disk (~5-10ms)");
@@ -74,14 +69,14 @@ export function scoreLatency(
     );
   }
 
-  // DNS entry point (3 pts)
+  // DNS entry point (1 pt)
   const hasDNS = componentIds.includes("dns");
   if (hasDNS) {
-    score += 3;
-    passed.push("DNS as proper entry point — enables geo-routing and failover via DNS-based load balancing");
+    score += 1;
+    passed.push("DNS-based geo-routing can direct users to the nearest region, reducing cross-region latency");
   } else {
     feedback.push(
-      "Add DNS as the entry point for your system. DNS is the first hop of every request and enables geo-based routing (Route 53, Cloud DNS) to direct users to the nearest region, reducing latency by 50-150ms for international users."
+      "Add DNS with geo-routing (Route 53, Cloud DNS) to direct users to the nearest region. DNS alone isn't a latency optimization, but DNS-based geo-routing can reduce cross-region latency by 50-150ms for international users."
     );
   }
 
@@ -96,22 +91,22 @@ export function scoreLatency(
     );
   }
 
-  // Load balancer for connection reuse (3 pts)
+  // Load balancer for connection reuse (2 pts)
   const hasLB = componentIds.includes("load-balancer");
   if (hasLB) {
-    score += 3;
-    passed.push("Load balancer enables connection pooling and keep-alive, reducing TCP/TLS handshake overhead");
+    score += 2;
+    passed.push("Load balancer enables connection pooling and keep-alive, though it adds an extra network hop");
   } else {
     feedback.push(
-      "Add a Load Balancer for connection pooling and keep-alive support. Without one, each client request may need a fresh TCP handshake (1 RTT) + TLS handshake (2 RTTs), adding 30-100ms of overhead. LBs maintain warm connections to backends."
+      "Add a Load Balancer for connection pooling and keep-alive support. LBs add an extra hop but maintain warm connections to backends, avoiding fresh TCP+TLS handshakes (30-100ms overhead) on each request."
     );
   }
 
-  // Low-latency data store choice (2 pts)
+  // Low-latency data store choice (5 pts) — compensates for DNS/LB reductions
   const hasLowLatencyStore =
     componentIds.includes("cache") || componentIds.includes("nosql-db");
   if (hasLowLatencyStore) {
-    score += 2;
+    score += 5;
     passed.push("Using low-latency data stores (in-memory cache or NoSQL) for fast data access");
   } else {
     feedback.push(
@@ -134,21 +129,25 @@ function computeMaxDepth(nodes: Node<ComponentNodeData>[], edges: Edge[]): numbe
     inDegree.set(edge.target, (inDegree.get(edge.target) ?? 0) + 1);
   }
 
+  // Topological sort (Kahn's algorithm) — process each node only after all predecessors
   const dist = new Map<string, number>();
-  const entryNodes = nodes.filter((n) => (inDegree.get(n.id) ?? 0) === 0);
-  for (const entry of entryNodes) dist.set(entry.id, 1);
+  const remaining = new Map(inDegree);
+  const queue: string[] = [];
 
-  const queue = [...entryNodes.map((n) => n.id)];
-  const visited = new Set<string>();
+  for (const node of nodes) {
+    if ((remaining.get(node.id) ?? 0) === 0) {
+      queue.push(node.id);
+      dist.set(node.id, 1);
+    }
+  }
 
   while (queue.length > 0) {
     const id = queue.shift()!;
-    if (visited.has(id)) continue;
-    visited.add(id);
     for (const child of adjacency.get(id) ?? []) {
       const newDist = (dist.get(id) ?? 1) + 1;
       if (newDist > (dist.get(child) ?? 0)) dist.set(child, newDist);
-      if (!visited.has(child)) queue.push(child);
+      remaining.set(child, (remaining.get(child) ?? 1) - 1);
+      if (remaining.get(child) === 0) queue.push(child);
     }
   }
 

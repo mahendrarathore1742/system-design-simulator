@@ -47,7 +47,7 @@ export function ComponentPalette() {
     ghost.textContent = comp?.label ?? componentId;
     document.body.appendChild(ghost);
     e.dataTransfer.setDragImage(ghost, 0, 0);
-    requestAnimationFrame(() => document.body.removeChild(ghost));
+    setTimeout(() => document.body.removeChild(ghost), 0);
   }
 
   const query = search.toLowerCase().trim();
@@ -59,6 +59,7 @@ export function ComponentPalette() {
           <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
           <input
             type="text"
+            aria-label="Search components"
             placeholder="Search components..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}

@@ -14,6 +14,8 @@ export function Sidebar({ open }: SidebarProps) {
       className={`glass-panel flex shrink-0 flex-col border-r border-zinc-800/80 overflow-hidden transition-all duration-300 ease-in-out ${
         open ? "w-[280px] opacity-100" : "w-0 opacity-0 border-r-0"
       }`}
+      aria-hidden={!open || undefined}
+      inert={!open || undefined}
     >
       <div className="flex w-[280px] flex-1 flex-col">
         <Tabs defaultValue="components" className="flex flex-1 flex-col">

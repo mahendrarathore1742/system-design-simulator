@@ -14,35 +14,49 @@ export function scoreAvailability(
 
   // Check no single point of failure (3 pts)
   const scalableNodes = nodes.filter((n) => n.data.scalable || (n.data.replicas || 1) > 1);
-  const noSpof = scalableNodes.length >= Math.floor(nodes.length * 0.5);
+  const noSpof = scalableNodes.length >= Math.floor(nodes.length * 0.7);
   if (noSpof && nodes.length > 0) {
     score += 3;
-    passed.push("Most components are scalable or redundant, minimizing single points of failure");
+    passed.push("At least 70% of components are scalable or redundant, minimizing single points of failure");
   } else {
     feedback.push(
-      "Too many single points of failure — over half your components can't scale or failover. Each non-redundant component is a potential outage point. Use scalable components (App Server, Cache, NoSQL) and add replicas to stateful ones to target 99.9%+ availability."
+      "Too many single points of failure — over 30% of your components can't scale or failover. Most components on the critical path should be redundant. Use scalable components (App Server, Cache, NoSQL) and add replicas to stateful ones to target 99.9%+ availability."
     );
   }
 
   // Check DB redundancy (3 pts)
-  const hasMultipleStorage = nodes.filter((n) => n.data.category === "storage").length >= 2;
-  if (hasMultipleStorage) {
+  const hasReplicatedStorage = nodes.some(
+    (n) => n.data.category === "storage" && (n.data.replicas || 1) > 1
+  );
+  if (hasReplicatedStorage) {
     score += 3;
-    passed.push("Multiple storage layers provide data redundancy and failover capability");
+    passed.push("Database replication provides real redundancy — failover to replica if primary goes down");
   } else {
     feedback.push(
-      "Add redundant storage layers (e.g., Cache + Database, or SQL + NoSQL). If your only database goes down, the entire system is unavailable. Having a cache as a read fallback lets you serve stale data during DB outages rather than returning errors."
+      "Add database replication (replicas > 1) to at least one storage component. Having multiple different storage types (e.g., Redis + PostgreSQL) isn't redundancy — if PostgreSQL goes down, Redis can't replace it. True redundancy means replicas of the same data store ready to take over on failure."
     );
   }
 
   // Check multi-path (3 pts)
-  const hasMultiPath = edges.length >= nodes.length;
+  const entryComponents = ["load-balancer", "api-gateway", "cdn"];
+  const entryNodes = nodes.filter((n) => entryComponents.includes(n.data.componentId));
+  const entryWithMultipleDownstream = entryNodes.some((entry) => {
+    const downstreamTargets = edges.filter((e) => e.source === entry.id);
+    return downstreamTargets.length >= 2;
+  });
+  const componentTypeCounts = new Map<string, number>();
+  for (const n of nodes) {
+    const cid = n.data.componentId;
+    componentTypeCounts.set(cid, (componentTypeCounts.get(cid) ?? 0) + 1);
+  }
+  const hasRedundantInstances = Array.from(componentTypeCounts.values()).some((count) => count >= 2);
+  const hasMultiPath = entryWithMultipleDownstream || hasRedundantInstances;
   if (hasMultiPath && nodes.length > 2) {
     score += 3;
-    passed.push("Multiple data paths exist, preventing cascading failures from a single link failure");
+    passed.push("Redundant paths exist — entry points fan out to multiple targets or duplicate instances provide failover");
   } else {
     feedback.push(
-      "Add alternative data paths to avoid cascading failures. If every request follows a single chain (A→B→C→D), any link failure takes down the entire system. Add redundant connections so traffic can route around failures."
+      "Add redundant data paths to avoid cascading failures. Entry-point components (load balancer, API gateway, CDN) should fan out to multiple downstream targets, or use multiple instances of the same component type for failover. A single chain (A→B→C→D) means any link failure takes down the entire system."
     );
   }
 

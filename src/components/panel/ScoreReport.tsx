@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -66,6 +65,32 @@ function CategorySection({ category }: { category: CategoryScore }) {
       )}
     </div>
   );
+}
+
+const VERDICT_BORDER: Record<string, string> = {
+  "text-emerald-400": "border-emerald-400/30",
+  "text-cyan-400": "border-cyan-400/30",
+  "text-blue-400": "border-blue-400/30",
+  "text-amber-400": "border-amber-400/30",
+  "text-rose-400": "border-rose-400/30",
+  "text-zinc-500": "border-zinc-500/30",
+};
+
+const VERDICT_BG: Record<string, string> = {
+  "text-emerald-400": "bg-emerald-400/5",
+  "text-cyan-400": "bg-cyan-400/5",
+  "text-blue-400": "bg-blue-400/5",
+  "text-amber-400": "bg-amber-400/5",
+  "text-rose-400": "bg-rose-400/5",
+  "text-zinc-500": "bg-zinc-500/5",
+};
+
+function verdictBorderClass(verdictColor: string): string {
+  return VERDICT_BORDER[verdictColor] ?? "border-zinc-500/30";
+}
+
+function verdictBgClass(verdictColor: string): string {
+  return VERDICT_BG[verdictColor] ?? "bg-zinc-500/5";
 }
 
 export function ScoreReport() {
@@ -133,7 +158,7 @@ export function ScoreReport() {
 
           <Badge
             variant="outline"
-            className={`${scoreResult.verdictColor} border-current/30 bg-current/5 px-3 py-0.5 text-xs font-semibold`}
+            className={`${scoreResult.verdictColor} ${verdictBorderClass(scoreResult.verdictColor)} ${verdictBgClass(scoreResult.verdictColor)} px-3 py-0.5 text-xs font-semibold`}
           >
             {scoreResult.verdict}
           </Badge>

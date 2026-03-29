@@ -1,11 +1,13 @@
 "use client";
 
 import { memo } from "react";
-import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import { motion } from "framer-motion";
 import type { ComponentNodeData } from "@/store/canvasStore";
 import { Server } from "lucide-react";
 import { ICON_MAP } from "@/lib/icons";
+
+type ComponentNode = Node<ComponentNodeData, "component">;
 
 const CATEGORY_COLORS: Record<string, { border: string; icon: string; glow: string }> = {
   networking: { border: "border-blue-500/40", icon: "text-blue-400", glow: "shadow-blue-500/20" },
@@ -22,8 +24,8 @@ const STATUS_RING: Record<string, string> = {
   idle: "ring-zinc-700/60",
 };
 
-function ComponentNodeInner({ data, selected }: NodeProps) {
-  const nodeData = data as unknown as ComponentNodeData;
+function ComponentNodeInner({ data, selected }: NodeProps<ComponentNode>) {
+  const nodeData = data;
   const Icon = ICON_MAP[nodeData.icon] ?? Server;
   const colors = CATEGORY_COLORS[nodeData.category] ?? CATEGORY_COLORS.compute;
   const status = (nodeData.status as string) ?? "idle";
@@ -113,4 +115,25 @@ function ComponentNodeInner({ data, selected }: NodeProps) {
   );
 }
 
-export const ComponentNode = memo(ComponentNodeInner);
+function areComponentNodePropsEqual(
+  prev: NodeProps<ComponentNode>,
+  next: NodeProps<ComponentNode>
+): boolean {
+  if (prev.selected !== next.selected) return false;
+  const p = prev.data;
+  const n = next.data;
+  return (
+    p.componentId === n.componentId &&
+    p.label === n.label &&
+    p.status === n.status &&
+    p.replicas === n.replicas &&
+    p.utilization === n.utilization &&
+    p.maxQPS === n.maxQPS &&
+    p.latencyMs === n.latencyMs &&
+    p.category === n.category &&
+    p.icon === n.icon &&
+    p.isBottleneck === n.isBottleneck
+  );
+}
+
+export const ComponentNode = memo(ComponentNodeInner, areComponentNodePropsEqual);

@@ -4,7 +4,8 @@ import type { CategoryScore } from "@/types/scoring";
 
 export function scoreTradeoffs(
   nodes: Node<ComponentNodeData>[],
-  edges: Edge[]
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _edges: Edge[]
 ): CategoryScore {
   const feedback: string[] = [];
   const passed: string[] = [];
@@ -24,20 +25,23 @@ export function scoreTradeoffs(
     );
   }
 
-  // Consistency/availability tradeoff (3 pts) — using both SQL and NoSQL shows awareness
-  const hasSql = componentIds.includes("sql-db");
-  const hasNosql = componentIds.includes("nosql-db");
-  if (hasSql && hasNosql) {
+  // Polyglot persistence (3 pts) — using multiple storage types suited to different access patterns
+  const storageTypes = new Set<string>();
+  const polyglotTypes = ["sql-db", "nosql-db", "cache", "timeseries-db", "graph-db", "search", "object-storage"];
+  for (const id of componentIds) {
+    if (polyglotTypes.includes(id)) storageTypes.add(id);
+  }
+  if (storageTypes.size >= 2) {
     score += 3;
-    passed.push("Using both SQL (strong consistency) and NoSQL (high availability) shows CAP theorem awareness");
-  } else if (hasSql || hasNosql) {
+    passed.push("Polyglot persistence — using " + storageTypes.size + " distinct storage types suited to different access patterns");
+  } else if (storageTypes.size === 1) {
     score += 1;
     feedback.push(
-      "Consider using both SQL and NoSQL databases for different access patterns. SQL gives you ACID transactions and strong consistency (critical for payments, user accounts). NoSQL gives you horizontal scalability and high availability (ideal for timelines, logs, sessions). Using both shows understanding of the CAP theorem tradeoffs."
+      "Consider polyglot persistence — using multiple storage technologies suited to different access patterns. For example, SQL for transactional data, NoSQL for high-throughput key-value access, cache for hot reads, and object storage for blobs. One storage type rarely fits all workloads efficiently."
     );
   } else {
     feedback.push(
-      "No database in your design — add at least one. Consider the CAP theorem: SQL databases prioritize Consistency (CP), while NoSQL databases like DynamoDB/Cassandra prioritize Availability (AP). Most real systems use both for different workloads."
+      "No storage in your design — add at least one. Real systems benefit from polyglot persistence: different storage technologies (SQL, NoSQL, cache, object storage) suited to different access patterns and consistency requirements."
     );
   }
 

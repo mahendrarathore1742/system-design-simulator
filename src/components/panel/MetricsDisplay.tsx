@@ -16,7 +16,7 @@ export function MetricsDisplay() {
   const result = useSimulationStore((s) => s.result);
   const nodes = useCanvasStore((s) => s.nodes);
 
-  if (!result) {
+  if (!result || !(result.nodeMetrics instanceof Map)) {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-center">
         <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-zinc-700/50">

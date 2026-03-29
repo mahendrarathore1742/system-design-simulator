@@ -21,14 +21,19 @@ interface RightPanelProps {
 }
 
 export function RightPanel({ open, onSimulate }: RightPanelProps) {
+  const activeRightTab = useAppStore((s) => s.activeRightTab);
+  const setActiveRightTab = useAppStore((s) => s.setActiveRightTab);
+
   return (
     <aside
       className={`glass-panel flex shrink-0 flex-col border-l border-zinc-800/80 overflow-hidden transition-all duration-300 ease-in-out ${
         open ? "w-[300px] opacity-100" : "w-0 opacity-0 border-l-0"
       }`}
+      aria-hidden={!open || undefined}
+      inert={!open || undefined}
     >
       <div className="flex w-[300px] flex-1 flex-col">
-        <Tabs defaultValue="properties" className="flex flex-1 flex-col">
+        <Tabs value={activeRightTab} onValueChange={(v) => setActiveRightTab(v as typeof activeRightTab)} className="flex flex-1 flex-col">
           <TabsList className="mx-2 mt-2 h-9 w-auto shrink-0 bg-zinc-700/40">
             <TabsTrigger
               value="properties"
@@ -176,6 +181,7 @@ function PropertiesTab() {
                   </span>
                 </div>
                 <Slider
+                  aria-label="Replicas"
                   value={[selectedNode.data.replicas]}
                   onValueChange={(v) =>
                     updateNodeData(selectedNode.id, { replicas: Array.isArray(v) ? v[0] : v })

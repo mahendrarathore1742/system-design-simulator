@@ -29,6 +29,7 @@ export function ProblemSelector() {
           <button
             key={problem.id}
             onClick={() => setSelectedProblem(problem.id)}
+            aria-pressed={problem.id === selectedProblemId}
             className={`flex w-full flex-col gap-1.5 rounded-lg px-2.5 py-2 text-left transition-all ${
               problem.id === selectedProblemId
                 ? "border border-cyan-500/20 bg-cyan-500/10"

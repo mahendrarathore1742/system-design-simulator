@@ -3,7 +3,7 @@
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Play, Square } from "lucide-react";
+import { Play, Loader2 } from "lucide-react";
 import { useSimulationStore } from "@/store/simulationStore";
 
 const PRESETS = [
@@ -63,22 +63,8 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
           />
         </div>
 
-        <div>
-          <div className="mb-1.5 flex items-center justify-between">
-            <label className="text-xs text-zinc-400">Duration (sec)</label>
-            <span className="font-mono text-xs text-cyan-400">
-              {config.durationSec}s
-            </span>
-          </div>
-          <Slider
-            value={[config.durationSec]}
-            onValueChange={(v) => setConfig({ durationSec: Array.isArray(v) ? v[0] : v })}
-            min={1}
-            max={60}
-            step={1}
-            className=""
-          />
-        </div>
+        {/* Duration slider removed: the simulation engine performs a single-snapshot
+            calculation (not a time-series simulation), so durationSec has no effect. */}
       </div>
 
       <Separator className="bg-zinc-700/40" />
@@ -91,8 +77,8 @@ export function SimulationControls({ onSimulate }: SimulationControlsProps) {
       >
         {isRunning ? (
           <>
-            <Square className="h-3 w-3" />
-            Running...
+            <Loader2 className="h-3 w-3 animate-spin" />
+            Simulating...
           </>
         ) : (
           <>

@@ -23,13 +23,17 @@ function formatBytes(bytes: number): string {
 export function CapacityCalculator() {
   const [dau, setDau] = useState(100_000_000);
   const [reqPerUser, setReqPerUser] = useState(20);
+  const [writeRatio, setWriteRatio] = useState(0.2);
   const [dataSizeKB, setDataSizeKB] = useState(5);
 
   const estimates = useMemo(() => {
     const totalRequests = dau * reqPerUser;
     const qps = totalRequests / 86400;
     const peakQps = qps * 3;
-    const storagePerDay = totalRequests * dataSizeKB * 1024; // bytes
+    // Storage only counts writes (reads don't create new data)
+    const writeQPS = qps * writeRatio;
+    const writesPerDay = totalRequests * writeRatio;
+    const storagePerDay = writesPerDay * dataSizeKB * 1024; // bytes
     const storagePerYear = storagePerDay * 365;
     const bandwidthBps = peakQps * dataSizeKB * 1024 * 8; // bits/sec
 
@@ -37,11 +41,12 @@ export function CapacityCalculator() {
       totalRequests,
       qps,
       peakQps,
+      writeQPS,
       storagePerDay,
       storagePerYear,
       bandwidthBps,
     };
-  }, [dau, reqPerUser, dataSizeKB]);
+  }, [dau, reqPerUser, writeRatio, dataSizeKB]);
 
   return (
     <div className="space-y-4">
@@ -74,6 +79,17 @@ export function CapacityCalculator() {
             { label: "20", value: 20 },
             { label: "50", value: 50 },
             { label: "100", value: 100 },
+          ]}
+        />
+        <InputField
+          label="Write Ratio"
+          value={writeRatio}
+          onChange={setWriteRatio}
+          presets={[
+            { label: "10%", value: 0.1 },
+            { label: "20%", value: 0.2 },
+            { label: "50%", value: 0.5 },
+            { label: "80%", value: 0.8 },
           ]}
         />
         <InputField
@@ -138,7 +154,7 @@ export function CapacityCalculator() {
         <div className="mt-1 space-y-0.5 font-mono text-[11px] text-zinc-400">
           <p>QPS = DAU × req/user ÷ 86,400</p>
           <p>Peak = QPS × 3</p>
-          <p>Storage/yr = DAU × req × size × 365</p>
+          <p>Storage/yr = DAU × req × writeRatio × size × 365</p>
         </div>
       </div>
     </div>
@@ -161,15 +177,17 @@ interface InputFieldProps {
 }
 
 function InputField({ label, value, onChange, presets }: InputFieldProps) {
+  const inputId = `capacity-${label.replace(/\s+/g, "-").toLowerCase()}`;
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <label className="text-xs text-zinc-400">{label}</label>
+        <label htmlFor={inputId} className="text-xs text-zinc-400">{label}</label>
         <span className="font-mono text-xs text-cyan-400">
           {formatNumber(value)}
         </span>
       </div>
       <input
+        id={inputId}
         type="number"
         value={value}
         onChange={(e) => {

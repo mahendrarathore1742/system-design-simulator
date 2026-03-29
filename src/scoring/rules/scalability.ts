@@ -19,9 +19,10 @@ export function scoreScalability(
     (n) => n.data.category === "compute" && n.data.scalable
   );
   const hasDBScaling =
-    componentIds.includes("nosql-db") ||
     nodes.some(
-      (n) => n.data.componentId === "sql-db" && (n.data.replicas || 1) > 1
+      (n) =>
+        (n.data.componentId === "nosql-db" || n.data.componentId === "sql-db") &&
+        (n.data.replicas || 1) > 1
     );
 
   // Check load balancer (3 pts)

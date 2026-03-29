@@ -8,8 +8,8 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     category: "networking",
     icon: "Globe",
     maxQPS: 100000,
-    latencyMs: 50,
-    scalable: false,
+    latencyMs: 10,
+    scalable: true,
     stateful: false,
     description:
       "Domain Name System — resolves human-readable domain names (e.g., example.com) to IP addresses. Every internet request starts with a DNS lookup, making it the first hop in any system design. Services like AWS Route 53 and Google Cloud DNS also support health-checked routing and geo-based load balancing.",
@@ -20,7 +20,7 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     category: "networking",
     icon: "Cloudy",
     maxQPS: 500000,
-    latencyMs: 5,
+    latencyMs: 15,
     scalable: true,
     stateful: false,
     description:
@@ -31,8 +31,8 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     label: "Load Balancer",
     category: "networking",
     icon: "Network",
-    maxQPS: 100000,
-    latencyMs: 2,
+    maxQPS: 1000000,
+    latencyMs: 1,
     scalable: true,
     stateful: false,
     description:
@@ -58,7 +58,7 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     maxQPS: 80000,
     latencyMs: 1,
     scalable: true,
-    stateful: false,
+    stateful: true,
     description:
       "Throttles requests per client, IP, or API key to protect downstream services from abuse, DDoS attacks, and traffic spikes. Typically implemented using token bucket or sliding window algorithms backed by Redis. Often built into API gateways like Kong or AWS WAF, or implemented as a standalone service.",
   },
@@ -94,7 +94,7 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     category: "storage",
     icon: "Database",
     maxQPS: 10000,
-    latencyMs: 5,
+    latencyMs: 8,
     scalable: false,
     stateful: true,
     description:
@@ -129,8 +129,8 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     label: "Object Storage",
     category: "storage",
     icon: "Archive",
-    maxQPS: 50000,
-    latencyMs: 20,
+    maxQPS: 25000,
+    latencyMs: 75,
     scalable: true,
     stateful: true,
     description:
@@ -157,7 +157,7 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     maxQPS: 100000,
     latencyMs: 5,
     scalable: true,
-    stateful: false,
+    stateful: true,
     description:
       "Asynchronous message broker that decouples producers from consumers, enabling reliable background processing, event-driven architectures, and traffic spike buffering. Critical for any workflow where synchronous processing would create bottlenecks or coupling. Apache Kafka, Amazon SQS/SNS, Google Cloud Pub/Sub, and RabbitMQ are widely adopted.",
   },
@@ -179,10 +179,10 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     label: "Monitoring",
     category: "infrastructure",
     icon: "Activity",
-    maxQPS: Infinity,
-    latencyMs: 0,
-    scalable: false,
-    stateful: false,
+    maxQPS: 500000,
+    latencyMs: 5,
+    scalable: true,
+    stateful: true,
     description:
       "Observability stack for metrics collection, centralized logging, distributed tracing, and alerting. Every production system needs monitoring to detect outages, track SLOs, and debug performance issues. Prometheus + Grafana, AWS CloudWatch, Google Cloud Monitoring, Datadog, and the ELK stack are standard tools.",
   },
@@ -241,12 +241,12 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     label: "Graph Database",
     category: "storage",
     icon: "Share2",
-    maxQPS: 20000,
-    latencyMs: 5,
+    maxQPS: 8000,
+    latencyMs: 15,
     scalable: true,
     stateful: true,
     description:
-      "Stores and queries highly connected data using nodes, edges, and properties — optimized for relationship traversals like friend-of-friend queries, recommendation engines, and fraud detection. Neo4j, Amazon Neptune, and JanusGraph outperform SQL joins by 100-1000x for deep graph traversals.",
+      "Stores and queries highly connected data using nodes, edges, and properties — optimized for relationship traversals like friend-of-friend queries, recommendation engines, and fraud detection. Neo4j, Amazon Neptune, and JanusGraph significantly outperform relational joins for multi-hop traversals.",
   },
   {
     id: "timeseries-db",
@@ -266,7 +266,7 @@ export const SYSTEM_COMPONENTS: SystemComponent[] = [
     category: "storage",
     icon: "Warehouse",
     maxQPS: 1000,
-    latencyMs: 1000,
+    latencyMs: 5000,
     scalable: true,
     stateful: true,
     description:

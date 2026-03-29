@@ -24,6 +24,8 @@ interface AppState {
   clearToast: () => void;
 }
 
+let toastTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
 export const useAppStore = create<AppState>((set) => ({
   selectedProblemId: "url-shortener",
   leftSidebarOpen: true,
@@ -41,11 +43,30 @@ export const useAppStore = create<AppState>((set) => ({
   toggleTheme: () =>
     set((s) => {
       const newTheme = s.theme === "dark" ? "light" : "dark";
-      if (typeof document !== "undefined") {
-        document.documentElement.classList.toggle("dark", newTheme === "dark");
-      }
       return { theme: newTheme };
     }),
-  showToast: (message, type) => set({ toast: { message, type } }),
-  clearToast: () => set({ toast: null }),
+  showToast: (message, type) => {
+    if (toastTimeoutId !== null) {
+      clearTimeout(toastTimeoutId);
+    }
+    set({ toast: { message, type } });
+    toastTimeoutId = setTimeout(() => {
+      set({ toast: null });
+      toastTimeoutId = null;
+    }, 4000);
+  },
+  clearToast: () => {
+    if (toastTimeoutId !== null) {
+      clearTimeout(toastTimeoutId);
+      toastTimeoutId = null;
+    }
+    set({ toast: null });
+  },
 }));
+
+// Side effect: sync theme changes to document.documentElement
+useAppStore.subscribe((state, prevState) => {
+  if (state.theme !== prevState.theme && typeof document !== "undefined") {
+    document.documentElement.classList.toggle("dark", state.theme === "dark");
+  }
+});

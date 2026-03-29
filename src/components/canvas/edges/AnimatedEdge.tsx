@@ -6,6 +6,7 @@ import {
   getBezierPath,
   type EdgeProps,
 } from "@xyflow/react";
+import { useSimulationStore } from "@/store/simulationStore";
 
 function AnimatedEdgeInner({
   id,
@@ -18,6 +19,8 @@ function AnimatedEdgeInner({
   style,
   markerEnd,
 }: EdgeProps) {
+  const isRunning = useSimulationStore((s) => s.isRunning);
+
   const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
@@ -48,30 +51,34 @@ function AnimatedEdgeInner({
           strokeWidth: 1.5,
         }}
       />
-      {/* Animated dots */}
-      <circle r="2.5" fill="rgb(34, 211, 238)" opacity="0.9">
-        <animateMotion
-          dur="2s"
-          repeatCount="indefinite"
-          path={edgePath}
-        />
-      </circle>
-      <circle r="2" fill="rgb(34, 211, 238)" opacity="0.5">
-        <animateMotion
-          dur="2s"
-          repeatCount="indefinite"
-          path={edgePath}
-          begin="0.7s"
-        />
-      </circle>
-      <circle r="1.5" fill="rgb(34, 211, 238)" opacity="0.3">
-        <animateMotion
-          dur="2s"
-          repeatCount="indefinite"
-          path={edgePath}
-          begin="1.4s"
-        />
-      </circle>
+      {/* Animated dots — only render when simulation is running */}
+      {isRunning && (
+        <>
+          <circle r="2.5" fill="rgb(34, 211, 238)" opacity="0.9">
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={edgePath}
+            />
+          </circle>
+          <circle r="2" fill="rgb(34, 211, 238)" opacity="0.5">
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={edgePath}
+              begin="0.7s"
+            />
+          </circle>
+          <circle r="1.5" fill="rgb(34, 211, 238)" opacity="0.3">
+            <animateMotion
+              dur="2s"
+              repeatCount="indefinite"
+              path={edgePath}
+              begin="1.4s"
+            />
+          </circle>
+        </>
+      )}
     </g>
   );
 }

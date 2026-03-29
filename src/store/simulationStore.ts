@@ -39,6 +39,7 @@ export const useSimulationStore = create<SimulationState>((set) => ({
   reset: () =>
     set({
       isRunning: false,
+      config: defaultConfig,
       result: null,
       scoreResult: null,
       showScore: false,

@@ -59,6 +59,7 @@ export function AppShell() {
     const result = scoreDesign(nodes, edges);
     useSimulationStore.getState().setScoreResult(result);
     useSimulationStore.getState().setShowScore(true);
+    useAppStore.getState().setActiveRightTab("score");
 
     useAppStore.getState().showToast("Design scored!", "success");
   }, []);
