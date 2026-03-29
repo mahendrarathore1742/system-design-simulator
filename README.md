@@ -1,23 +1,9 @@
 <div align="center">
 
-<!-- Animated SVG Header -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#09090b"/>
-      <stop offset="100%" style="stop-color:#18181b"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#06b6d4"/>
-      <stop offset="100%" style="stop-color:#8b5cf6"/>
-    </linearGradient>
-  </defs>
-  <rect width="800" height="200" rx="16" fill="url(#bg)"/>
-  <text x="400" y="80" text-anchor="middle" font-family="system-ui,sans-serif" font-size="42" font-weight="700" fill="#fafafa">SystemSim</text>
-  <text x="400" y="115" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#a1a1aa">System Design Interview Simulator</text>
-  <rect x="250" y="135" width="300" height="3" rx="1.5" fill="url(#accent)"/>
-  <text x="400" y="170" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#71717a">Practice. Simulate. Score. Ship.</text>
-</svg>
+<!-- Animated SVG Banner with live traffic dots and gradient pulse -->
+<a href="https://github.com/vijaygupta18/system-design-simulator">
+  <img src="public/banner.svg" alt="SystemSim — System Design Interview Simulator" width="900"/>
+</a>
 
 <br/>
 
@@ -107,28 +93,11 @@ Each problem includes **requirements** (QPS, storage, latency targets), **constr
 
 ### Traffic Simulation Engine
 
-Simulate real load flowing through your architecture:
+Simulate real load flowing through your architecture with animated traffic visualization:
 
-```
-                    Topological Sort (Kahn's Algorithm)
-                    ──────────────────────────────────
-
-Input: 100K req/s ──▶ [LB] ──split──▶ [App1] ──fan-out──▶ [Cache] ──▶ ...
-                              50K/s    [App2]     100%      [DB]
-                              50K/s     each     to each
-
-Per-node metrics:
-┌──────────────┬────────┬─────────────┬──────────┬──────────┐
-│ Component    │   QPS  │ Utilization │ Latency  │  Status  │
-├──────────────┼────────┼─────────────┼──────────┼──────────┤
-│ Load Balancer│ 100,000│      10%    │    1ms   │ healthy  │
-│ App Server 1 │  50,000│      100%   │   60ms   │ critical │
-│ App Server 2 │  50,000│      100%   │   60ms   │ critical │
-│ Cache/Redis  │ 100,000│      100%   │    3ms   │ critical │
-│ SQL Database │ 100,000│     1250%   │   40ms   │ critical │
-└──────────────┴────────┴─────────────┴──────────┴──────────┘
-                                    ⚠ 3 Bottlenecks Detected
-```
+<div align="center">
+  <img src="public/traffic-sim.svg" alt="Traffic simulation with animated dots flowing through components" width="800"/>
+</div>
 
 **Engine features:**
 - **Kahn's topological sort** for correct fan-in QPS accumulation (not BFS)
@@ -142,18 +111,9 @@ Per-node metrics:
 
 Get scored across the dimensions interviewers actually evaluate:
 
-```
-Score Report                                    Total: 78/100
-─────────────────────────────────────────────────────────────
-
-Scalability     ██████████████��█░░░░  16/20   Good
-Availability    ██████████��███████░░  18/20   Excellent
-Latency         ████████████████░░░░  15/20   Good
-Cost Efficiency ███████████████░░░░░  14/20   Good
-Trade-offs      ███████████████░░░░░  15/20   Good
-
-Verdict: Good Design ─ Solid architecture with room for optimization
-```
+<div align="center">
+  <img src="public/scoring.svg" alt="Animated scoring — circular score + 5 category bars" width="800"/>
+</div>
 
 **Scoring checks:**
 - Load balancing, horizontal scaling, caching, async processing
