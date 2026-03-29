@@ -18,10 +18,12 @@ import {
   FolderOpen,
   StickyNote,
   GraduationCap,
+  Plus,
 } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 import { useCanvasStore } from "@/store/canvasStore";
 import { PROBLEMS } from "@/data/problems";
+import { useCustomProblemsStore } from "@/store/customProblemsStore";
 import { type Node, type Edge, useReactFlow } from "@xyflow/react";
 import { getComponentById } from "@/data/components";
 import type { ComponentNodeData } from "@/store/canvasStore";
@@ -34,9 +36,10 @@ interface TopBarProps {
   onSave: () => void;
   onLoad: () => void;
   onStartInterview: () => void;
+  onCreateProblem: () => void;
 }
 
-export function TopBar({ onSimulate, onScore, onClearCanvas, onSave, onLoad, onStartInterview }: TopBarProps) {
+export function TopBar({ onSimulate, onScore, onClearCanvas, onSave, onLoad, onStartInterview, onCreateProblem }: TopBarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const { getViewport } = useReactFlow();
@@ -47,7 +50,10 @@ export function TopBar({ onSimulate, onScore, onClearCanvas, onSave, onLoad, onS
   const toggleLeftSidebar = useAppStore((s) => s.toggleLeftSidebar);
   const toggleRightPanel = useAppStore((s) => s.toggleRightPanel);
 
-  const currentProblem = PROBLEMS.find((p) => p.id === selectedProblemId);
+  const customProblems = useCustomProblemsStore((s) => s.problems);
+  const currentProblem =
+    PROBLEMS.find((p) => p.id === selectedProblemId) ??
+    customProblems.find((p) => p.id === selectedProblemId);
 
   const addTextNote = useCallback(() => {
     const { x, y, zoom } = getViewport();
@@ -209,7 +215,45 @@ export function TopBar({ onSimulate, onScore, onClearCanvas, onSave, onLoad, onS
                 className="fixed inset-0 z-40"
                 onClick={() => setDropdownOpen(false)}
               />
-              <div className="absolute left-0 top-full z-50 mt-1 max-h-80 w-52 overflow-y-auto rounded-md border border-zinc-700 bg-zinc-800 py-1 shadow-lg">
+              <div className="absolute left-0 top-full z-50 mt-1 max-h-80 w-56 overflow-y-auto rounded-md border border-zinc-700 bg-zinc-800 py-1 shadow-lg">
+                {/* Create custom problem */}
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    onCreateProblem();
+                  }}
+                  className="flex w-full items-center gap-1.5 border-b border-zinc-700 px-3 py-1.5 text-left text-xs font-medium text-violet-400 transition-colors hover:bg-zinc-700"
+                >
+                  <Plus className="h-3 w-3" />
+                  Create Custom Problem
+                </button>
+
+                {/* Custom problems */}
+                {customProblems.map((problem) => (
+                  <button
+                    key={problem.id}
+                    onClick={() => {
+                      setSelectedProblem(problem.id);
+                      setDropdownOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-1.5 px-3 py-1.5 text-left text-xs transition-colors hover:bg-zinc-700 ${
+                      problem.id === selectedProblemId
+                        ? "text-cyan-500"
+                        : "text-zinc-400 hover:text-zinc-200"
+                    }`}
+                  >
+                    <span className="flex-1 truncate">{problem.title}</span>
+                    <span className="shrink-0 rounded bg-violet-500/10 px-1 py-0.5 text-[9px] font-medium text-violet-400">
+                      Custom
+                    </span>
+                  </button>
+                ))}
+
+                {customProblems.length > 0 && (
+                  <div className="my-0.5 h-px bg-zinc-700" />
+                )}
+
+                {/* Predefined problems */}
                 {PROBLEMS.map((problem) => (
                   <button
                     key={problem.id}
@@ -233,14 +277,16 @@ export function TopBar({ onSimulate, onScore, onClearCanvas, onSave, onLoad, onS
           )}
         </div>
 
-        <button
-          onClick={loadReference}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
-          title="Load reference solution"
-        >
-          <Download className="h-3 w-3" />
-          Reference
-        </button>
+        {!selectedProblemId.startsWith("custom-") && (
+          <button
+            onClick={loadReference}
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+            title="Load reference solution"
+          >
+            <Download className="h-3 w-3" />
+            Reference
+          </button>
+        )}
 
         <div className="mx-1 h-4 w-px bg-zinc-800" />
 

@@ -1,4 +1,5 @@
 import type { Problem } from "@/types/problem";
+import { useCustomProblemsStore } from "@/store/customProblemsStore";
 
 export const PROBLEMS: Problem[] = [
   {
@@ -2557,5 +2558,30 @@ export const PROBLEMS: Problem[] = [
 ];
 
 export function getProblemById(id: string): Problem | undefined {
-  return PROBLEMS.find((p) => p.id === id);
+  // Check predefined problems first
+  const predefined = PROBLEMS.find((p) => p.id === id);
+  if (predefined) return predefined;
+
+  // Check custom problems
+  if (id.startsWith("custom-")) {
+    const custom = useCustomProblemsStore
+      .getState()
+      .problems.find((p) => p.id === id);
+    if (custom) {
+      // Return a Problem-compatible shape (no hints or reference solution)
+      return {
+        id: custom.id,
+        title: custom.title,
+        difficulty: custom.difficulty,
+        description: custom.description,
+        requirements: custom.requirements,
+        constraints: custom.constraints,
+        hints: [],
+        referenceSolution: { nodes: [], edges: [] },
+        tags: custom.tags,
+      };
+    }
+  }
+
+  return undefined;
 }

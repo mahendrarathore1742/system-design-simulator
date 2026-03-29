@@ -7,9 +7,10 @@ import { LearningPath } from "./LearningPath";
 
 interface SidebarProps {
   open: boolean;
+  onCreateProblem?: () => void;
 }
 
-export function Sidebar({ open }: SidebarProps) {
+export function Sidebar({ open, onCreateProblem }: SidebarProps) {
   return (
     <aside
       className={`flex shrink-0 flex-col border-r border-zinc-800 bg-zinc-900 overflow-hidden transition-all duration-200 ${
@@ -46,7 +47,7 @@ export function Sidebar({ open }: SidebarProps) {
           </TabsContent>
 
           <TabsContent value="problems" className="mt-0 flex-1 min-h-0 overflow-y-auto">
-            <ProblemSelector />
+            <ProblemSelector onCreateProblem={onCreateProblem} />
           </TabsContent>
 
           <TabsContent value="learn" className="mt-0 flex-1 min-h-0 overflow-y-auto">
