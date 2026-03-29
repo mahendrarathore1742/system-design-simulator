@@ -18,8 +18,8 @@ export function Sidebar({ open }: SidebarProps) {
       aria-hidden={!open || undefined}
       inert={!open || undefined}
     >
-      <div className="flex w-[280px] flex-1 flex-col">
-        <Tabs defaultValue="components" className="flex flex-1 flex-col">
+      <div className="flex w-[280px] flex-1 flex-col min-h-0">
+        <Tabs defaultValue="components" className="flex flex-1 flex-col min-h-0">
           <TabsList className="mx-2 mt-2 h-8 w-auto shrink-0 bg-zinc-800">
             <TabsTrigger
               value="components"
@@ -41,15 +41,15 @@ export function Sidebar({ open }: SidebarProps) {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="components" className="mt-0 flex-1 overflow-y-auto">
+          <TabsContent value="components" className="mt-0 flex-1 min-h-0 overflow-y-auto">
             <ComponentPalette />
           </TabsContent>
 
-          <TabsContent value="problems" className="mt-0 flex-1 overflow-y-auto">
+          <TabsContent value="problems" className="mt-0 flex-1 min-h-0 overflow-y-auto">
             <ProblemSelector />
           </TabsContent>
 
-          <TabsContent value="learn" className="mt-0 flex-1 overflow-y-auto">
+          <TabsContent value="learn" className="mt-0 flex-1 min-h-0 overflow-y-auto">
             <LearningPath />
           </TabsContent>
         </Tabs>
