@@ -1245,7 +1245,7 @@ export const PROBLEMS: Problem[] = [
     title: "Amazon / E-Commerce",
     difficulty: "Hard",
     description:
-      "Design a large-scale e-commerce platform like Amazon. The system handles product catalog management with millions of SKUs, shopping cart persistence, inventory tracking across warehouses, order processing, and personalized recommendations. Amazon processes over 300 million active customer accounts and handles 66,000 orders per hour during peak events like Prime Day — the central challenges are maintaining inventory consistency across concurrent purchases, building a low-latency product search, and orchestrating the complex order fulfillment pipeline.",
+      "Design a large-scale e-commerce platform like Amazon. The system handles product catalog management with millions of SKUs, shopping cart persistence, inventory tracking across warehouses, order processing, and personalized recommendations. Amazon processes over 300 million active customer accounts and handles over 12 million orders per hour during peak events like Prime Day — the central challenges are maintaining inventory consistency across concurrent purchases, building a low-latency product search, and orchestrating the complex order fulfillment pipeline.",
     requirements: {
       readsPerSec: 200000,
       writesPerSec: 50000,
@@ -1325,7 +1325,7 @@ export const PROBLEMS: Problem[] = [
     title: "Slack / Team Messaging",
     difficulty: "Hard",
     description:
-      "Design a workspace-based team messaging platform like Slack or Microsoft Teams. The system supports organized channels, threaded conversations, direct messages, file sharing, search across message history, and integrations with third-party services. Slack handles over 65 million daily active users across millions of workspaces — the key challenges are maintaining message ordering and delivery guarantees across channels, building a fast full-text search index over billions of messages, and managing the complex permission model of workspaces, channels, and threads.",
+      "Design a workspace-based team messaging platform like Slack or Microsoft Teams. The system supports organized channels, threaded conversations, direct messages, file sharing, search across message history, and integrations with third-party services. Slack handles tens of millions of daily active users across millions of workspaces — the key challenges are maintaining message ordering and delivery guarantees across channels, building a fast full-text search index over billions of messages, and managing the complex permission model of workspaces, channels, and threads.",
     requirements: {
       readsPerSec: 100000,
       writesPerSec: 30000,
@@ -1415,7 +1415,7 @@ export const PROBLEMS: Problem[] = [
       users: "N/A (infrastructure)",
     },
     constraints: [
-      "Ingest 1M+ metrics data points per second with sub-second write latency",
+      "Ingest 500K+ metrics data points per second with sub-second write latency",
       "Time-series storage with automatic downsampling: raw (7 days), 1-min avg (30 days), 1-hour avg (1 year)",
       "Flexible query language for aggregation: avg, sum, percentiles, rate, group-by across arbitrary tag dimensions",
       "Real-time dashboard rendering with auto-refresh and support for custom visualization widgets",
